@@ -1,9 +1,18 @@
-const connection = require("./Utils/connection")
+const connection = require("./Utils/connection");
 const cTable = require('console.table');
+var figlet = require('figlet');
 
 connection.connect((err) => {
     if (err) throw err;
-    readEmps()
+    figlet('Employee Tracking System', function(err, data) {
+        if (err) {
+            console.log('Something went wrong...');
+            console.dir(err);
+            return;
+        }
+        console.log(data)
+    });
+    // readEmps()
 })
 
 function readEmps() {
