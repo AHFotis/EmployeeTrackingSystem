@@ -1,4 +1,5 @@
 const connection = require("./Utils/connection")
+const cTable = require('console.table');
 
 connection.connect((err) => {
     if (err) throw err;
@@ -11,7 +12,8 @@ function readEmps() {
         "SELECT empid, first_name, last_name FROM employee",
         function(err, res) {
             if (err) throw err;
-            console.table(res);
+            const table = cTable.getTable(res)
+            console.table(table);
             
         }    );
 }
