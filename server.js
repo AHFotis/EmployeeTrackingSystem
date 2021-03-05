@@ -1,10 +1,18 @@
 const connection = require("./Utils/connection");
 const cTable = require('console.table');
 var figlet = require('figlet');
+var inquirer = require('inquirer');
+const main = require("./Utils/prompts")
 
 connection.connect((err) => {
     if (err) throw err;
-    figlet('Employee Tracking System', function(err, data) {
+    initArt();
+    // readEmps()
+})
+
+
+ function initArt() {
+   figlet('Employee Tracking System', function(err, data) {
         if (err) {
             console.log('Something went wrong...');
             console.dir(err);
@@ -12,8 +20,8 @@ connection.connect((err) => {
         }
         console.log(data)
     });
-    // readEmps()
-})
+}
+
 
 function readEmps() {
     console.log("Finding employees...");
@@ -26,3 +34,4 @@ function readEmps() {
             
         }    );
 }
+
