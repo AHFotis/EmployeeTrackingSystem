@@ -29,14 +29,19 @@ connection.connect((err) => {
 function primaryPrompt() {
     inquirer.prompt(prompts)
     .then((response) => {
-        console.log(response)
          if (response.main == 'View All Employees') {
             functions.viewAll();
          }else if (response.main == 'View Employees by Department') {
              functions.viewDept();
          } else if (response.main == "View Employees by Role") {
              functions.viewRole();
-         }
+         } else if (response.main == "Add a Department") {
+            functions.addDept();
+        } else if (response.main == "Add a Role") {
+            functions.addRole();
+        }else if (response.main == "Add an Employee") {
+            functions.addEmployee();
+        }
          
          else {
              console.log("not yet")
