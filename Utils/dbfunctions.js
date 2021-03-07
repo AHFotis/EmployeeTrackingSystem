@@ -1,13 +1,15 @@
 const connection = require("./connection")
 var mysql = require("mysql");
 const inquirer = require("inquirer");
+const prompts = require("./prompts");
 
 function viewAll () {
     connection.query(
-        "SELECT empid, first_name, last_name, name, title, salary FROM employee LEFT JOIN role ON role.roleid = employee.empid LEFT JOIN department ON department.deptid = role.department_id",
+        "SELECT empid, first_name, last_name, name, title, salary FROM employee LEFT JOIN role ON role.roleid = employee.role_id LEFT JOIN department ON department.deptid = role.department_id",
         function(err, res) {
           if (err) throw err;
             console.table(res)
+            reroute();
         })
     }
 
@@ -17,6 +19,7 @@ function viewDept () {
         function(err, res) {
           if (err) throw err;
             console.table(res)
+            reroute();
         })
 }
 
@@ -26,6 +29,7 @@ function viewRole () {
         function(err, res) {
           if (err) throw err;
             console.table(res)
+            reroute();
         })
 }
 
@@ -41,6 +45,7 @@ function addDept () {
             function(err, res) {
             if (err) throw err;
             console.log("Department Successfully Added!")
+            reroute();
         })
     })
 }
@@ -70,6 +75,7 @@ function addRole () {
             function(err, res) {
             if (err) throw err;
             console.log("Role Successfully Added!")
+            reroute();
         })
     })
 }
@@ -94,9 +100,39 @@ function addEmployee () {
             function(err, res) {
             if (err) throw err;
             console.log("Role Successfully Added!")
+            reroute();
         })
     })
 }
+
+function reroute() {
+    inquirer.prompt(prompts)
+.then((response) => {
+     if (response.main == 'View All Employees') {
+        viewAll();
+     }else if (response.main == 'View Employees by Department') {
+         viewDept();
+     } else if (response.main == "View Employees by Role") {
+         viewRole();
+     } else if (response.main == "Add a Department") {
+        addDept();
+    } else if (response.main == "Add a Role") {
+        addRole();
+    }else if (response.main == "Add an Employee") {
+        addEmployee();
+    }else if (response.main == "Exit application") {
+        console.log("Now leaving employee database...")
+        connection.end()
+    } else {
+         console.log("not yet")
+     }
+    
+})
+   
+}    
+
+
+
 
 module.exports = {
     viewAll,
@@ -104,5 +140,5 @@ module.exports = {
     viewRole,
     addDept,
     addRole,
-    addEmployee
+    addEmployee,
 }

@@ -11,6 +11,7 @@ const prompts = [
           "Add a Role",
           "Add an Employee",
           "Update an Employee's Role",
+          "Exit application"
         ]
   },
 ]

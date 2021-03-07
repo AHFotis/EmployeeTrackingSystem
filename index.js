@@ -41,28 +41,17 @@ function primaryPrompt() {
             functions.addRole();
         }else if (response.main == "Add an Employee") {
             functions.addEmployee();
-        }
-         
-         else {
-             console.log("not yet")
+        }else if (response.main == "Exit application") {
+            console.log("Now leaving employee database...")
+            connection.end()
+        } else {
+             console.log("Invalid Option")
          }
         
     })
 }
 
 
-         
 
-function readEmps() {
-    console.log("Finding employees...");
-    connection.query(
-        "SELECT empid, first_name, last_name FROM employee",
-        function(err, res) {
-            if (err) throw err;
-            const table = cTable.getTable(res)
-            console.table(table);
-            
-        }  
-          );
-}
+
 
