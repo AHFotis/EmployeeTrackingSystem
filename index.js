@@ -6,6 +6,17 @@ const prompts = require("./Utils/prompts");
 const functions = require("./Utils/dbfunctions")
 var mysql = require("mysql");
 
+
+function initArt() {
+    figlet('Employee Tracking System', function(err, data) {
+         if (err) {
+             console.log('Something went wrong...');
+             console.dir(err);
+             return;
+         }
+         console.log(data)
+     });
+ }
 initArt();
 
 connection.connect((err) => {
@@ -14,16 +25,7 @@ connection.connect((err) => {
 })
 
 
- function initArt() {
-   figlet('Employee Tracking System', function(err, data) {
-        if (err) {
-            console.log('Something went wrong...');
-            console.dir(err);
-            return;
-        }
-        console.log(data)
-    });
-}
+ 
 
 
 function primaryPrompt() {
@@ -41,6 +43,8 @@ function primaryPrompt() {
             functions.addRole();
         }else if (response.main == "Add an Employee") {
             functions.addEmployee();
+        }else if (response.main == "Update an Employee's Role") {
+            functions.updateEmpRole();
         }else if (response.main == "Exit application") {
             console.log("Now leaving employee database...")
             connection.end()

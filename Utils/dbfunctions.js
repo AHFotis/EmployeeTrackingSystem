@@ -91,12 +91,24 @@ function addEmployee () {
         name: 'last',
         message: "Please type in the new employee's last name.",
     },
+    {
+        type: 'input',
+        name: 'role',
+        message: "Please type in the new employee's role id.",
+    },
+    {
+        type: 'input',
+        name: 'manager',
+        message: "Please type in the new employee's manager id.",
+    },
 ]).then((response) => {
         var first = response.first;
         var last = response.last;
+        var role = response.role;
+        var manager = response.manager;
         // var dept = response.dept;
         connection.query(
-            "INSERT INTO employee (first_name, last_name) VALUES ('" + first + "', '" + last + "')",
+            "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('" + first + "', '" + last + "', '" + role + "', '" + manager + "')",
             function(err, res) {
             if (err) throw err;
             console.log("Role Successfully Added!")
@@ -104,6 +116,62 @@ function addEmployee () {
         })
     })
 }
+
+function updateEmpRole () {
+    connection.query(
+        "SELECT first_name, last_name FROM employee",
+        function(err, res) {
+          if (err) throw err;
+            inquirer.prompt([
+
+                {
+                    name: "employee",
+                    type: "list",
+                    choices: function () {
+
+                        return res.map((employee) => ({
+                            name: employee.first_name + " " + employee.last_name
+
+                        }));
+
+                    },
+                    message: "Please select the employee you wish to update"
+                }
+            ]).then((response) =>{
+                console.log(response)
+                //saving the response to an array so first and last name can be split
+                let nameArray = response.employee.split(" ");
+                connection.query(
+                    "SELECT roleid, title FROM role",
+                    function(err, res) {
+                      if (err) throw err;
+                      console.table(res);
+                      inquirer.prompt([
+            
+                        {
+                            name: "role",
+                            type: "input",
+                            message: "Please type in the role id for this employee's new role from the list above."
+                        }
+                    ]).then((response) => {
+                        var firstN = nameArray[0];
+                        var lastN = nameArray[1];
+                        var newRole = response.role;
+                       console.log(firstN, lastN, newRole)
+                        
+                        connection.query(
+                            "UPDATE employee SET role_id = '" + newRole + "' WHERE first_name = '" + firstN + "' AND last_name = '" + lastN + "'",
+                            function(err, res) {
+                            if (err) throw err;
+                            console.log("Employee Successfully Updated!")
+                            reroute();
+                        })
+                    })
+                    })
+            })
+        })
+}
+
 
 function reroute() {
     inquirer.prompt(prompts)
@@ -120,6 +188,8 @@ function reroute() {
         addRole();
     }else if (response.main == "Add an Employee") {
         addEmployee();
+    }else if (response.main == "Update an Employee's Role") {
+        updateEmpRole();
     }else if (response.main == "Exit application") {
         console.log("Now leaving employee database...")
         connection.end()
@@ -141,4 +211,5 @@ module.exports = {
     addDept,
     addRole,
     addEmployee,
+    updateEmpRole
 }
