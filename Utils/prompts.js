@@ -1,5 +1,5 @@
-function firstQ() {
-    inquirer.prompt({
+const prompts = [
+   {
         name: "main",
         type: "list",
         message: "What would you like to do?",
@@ -13,5 +13,8 @@ function firstQ() {
           "Update an Employee's Role",
           "^C (EXIT)"
         ]
-        });
-}
+  },
+]
+        
+     
+module.exports = prompts

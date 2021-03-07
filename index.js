@@ -2,12 +2,15 @@ const connection = require("./Utils/connection");
 const cTable = require('console.table');
 var figlet = require('figlet');
 var inquirer = require('inquirer');
-const main = require("./Utils/prompts")
+const prompts = require("./Utils/prompts");
+const functions = require("./Utils/dbfunctions")
+var mysql = require("mysql");
+
+initArt();
 
 connection.connect((err) => {
     if (err) throw err;
-    initArt();
-    // readEmps()
+    primaryPrompt();
 })
 
 
@@ -23,6 +26,28 @@ connection.connect((err) => {
 }
 
 
+function primaryPrompt() {
+    inquirer.prompt(prompts)
+    .then((response) => {
+        console.log(response)
+         if (response.main == 'View All Employees') {
+            functions.viewAll();
+         }else if (response.main == 'View Employees by Department') {
+             functions.viewDept();
+         } else if (response.main == "View Employees by Role") {
+             functions.viewRole();
+         }
+         
+         else {
+             console.log("not yet")
+         }
+        
+    })
+}
+
+
+         
+
 function readEmps() {
     console.log("Finding employees...");
     connection.query(
@@ -32,6 +57,7 @@ function readEmps() {
             const table = cTable.getTable(res)
             console.table(table);
             
-        }    );
+        }  
+          );
 }
 
