@@ -7,6 +7,7 @@ const prompts = [
           "View All Employees",
           "View Employees by Department",
           "View Employees by Role",
+          "View Employees by Manager",
           "Add a Department",
           "Add a Role",
           "Add an Employee",

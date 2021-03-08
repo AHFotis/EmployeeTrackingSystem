@@ -33,6 +33,16 @@ function viewRole () {
         })
 }
 
+function viewManager () {
+    connection.query(
+        "SELECT e.first_name employee_first, e.last_name  employee_last, m.first_name manager_first, m.last_name manager_last FROM employee e INNER JOIN employee m ON m.empid = e.manager_id",
+        function(err, res) {
+          if (err) throw err;
+            console.table(res)
+            reroute();
+        })
+}
+
 function addDept () {
     inquirer.prompt([{
         type: 'input',
@@ -263,7 +273,9 @@ function reroute() {
          viewDept();
      } else if (response.main == "View Employees by Role") {
          viewRole();
-     } else if (response.main == "Add a Department") {
+     } else if (response.main == "View Employees by Manager") {
+        viewManager();
+    }else if (response.main == "Add a Department") {
         addDept();
     } else if (response.main == "Add a Role") {
         addRole();
@@ -289,8 +301,5 @@ module.exports = {
     viewAll,
     viewDept,
     viewRole,
-    addDept,
-    addRole,
-    addEmployee,
-    updateEmpRole
+    viewManager, 
 }

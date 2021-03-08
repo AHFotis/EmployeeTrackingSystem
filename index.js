@@ -3,7 +3,8 @@ const cTable = require('console.table');
 var figlet = require('figlet');
 var inquirer = require('inquirer');
 const prompts = require("./Utils/prompts");
-const functions = require("./Utils/dbfunctions")
+const viewFunctions = require("./Utils/viewfuncs")
+const addFunctions = require("./Utils/addfuncs.js")
 var mysql = require("mysql");
 
 
@@ -32,19 +33,21 @@ function primaryPrompt() {
     inquirer.prompt(prompts)
     .then((response) => {
          if (response.main == 'View All Employees') {
-            functions.viewAll();
+            viewFunctions.viewAll();
          }else if (response.main == 'View Employees by Department') {
-             functions.viewDept();
+            viewFunctions.viewDept();
          } else if (response.main == "View Employees by Role") {
-             functions.viewRole();
-         } else if (response.main == "Add a Department") {
-            functions.addDept();
+            viewFunctions.viewRole();
+         } else if (response.main == "View Employees by Manager") {
+            viewFunctions.viewManager();
+        }else if (response.main == "Add a Department") {
+            addFunctions.addDept();
         } else if (response.main == "Add a Role") {
-            functions.addRole();
+            addFunctions.addRole();
         }else if (response.main == "Add an Employee") {
-            functions.addEmployee();
+            addFunctions.addEmployee();
         }else if (response.main == "Update an Employee's Role") {
-            functions.updateEmpRole();
+            addFunctions.updateEmpRole();
         }else if (response.main == "Exit application") {
             console.log("Now leaving employee database...")
             connection.end()
