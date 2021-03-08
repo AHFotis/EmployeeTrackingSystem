@@ -130,6 +130,74 @@ function addEmployee () {
     })
 }
 
+// function addEmployee () {
+//     connection.query(
+//         "SELECT title FROM role",
+//         function (err, res) {
+//         if (err) throw err;
+//         inquirer.prompt([
+//     {
+//         type: 'input',
+//         name: 'first',
+//         message: "Please type in the new employee's first name.",
+//     },
+//     {
+//         type: 'input',
+//         name: 'last',
+//         message: "Please type in the new employee's last name.",
+//     },
+//     {
+//         type: "list",
+//         name: "role",
+//         choices: function () {
+
+//             return res.map((department) => ({
+//                 name: department.name
+
+//             }));
+
+//         },
+//         message: "Please select the role for this employee."
+//     },
+// ]).then((response) => {
+//     console.log(response)
+//         var first = response.first;
+//         var last = response.last;
+//         var role = response.role.name;
+//         connection.query(
+//             "SELECT first_name, last_name FROM employee WHERE manager_id = 'null'",
+//             function(err, res) {
+//               if (err) throw err;
+//               console.table(res);
+//               inquirer.prompt([
+    
+//                 {
+//                     name: "role",
+//                     type: "list",
+//                     choices: function () {
+            
+//                         return res.map((manager) => ({
+//                             name: manager.first_name + " " + manager.last_name
+            
+//                         }));
+            
+//                     },
+//                     message: "Please select the manager for this role."
+//                 }
+//             ]).then((response) => {
+//         connection.query(
+//             "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('" + first + "', '" + last + "', (select roleid from role where title = '" + role + "'), (select empid from employee where first_name = '" + response.name.first_name + "' and last_name = '" + response.name.last_name + "'))",
+//             function(err, res) {
+//             if (err) throw err;
+//             console.log("Role Successfully Added!")
+//             reroute();
+//         })
+//         })
+//     })
+// })
+// })
+// }
+
 function updateEmpRole () {
     connection.query(
         "SELECT first_name, last_name FROM employee",
