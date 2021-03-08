@@ -51,6 +51,10 @@ function addDept () {
 }
 
 function addRole () {
+connection.query(
+    "SELECT name FROM department",
+    function (err, res) {
+    if (err) throw err;
     inquirer.prompt([{
         type: 'input',
         name: 'role',
@@ -62,21 +66,30 @@ function addRole () {
         message: "Please type in this role's salary.",
     },
     {
-        type: 'input',
-        name: 'dept',
-        message: "Please type in this role's department number."
+        name: "department",
+        type: "list",
+        choices: function () {
+
+            return res.map((department) => ({
+                name: department.name
+
+            }));
+
+        },
+        message: "Please select the department for this role."
     }
 ]).then((response) => {
         var role = response.role;
         var salary = response.salary;
-        // var dept = response.dept;
+        var dept = response.department.name;
         connection.query(
-            "INSERT INTO role (title, salary) VALUES ('" + role + "', '" + salary + "')",
+            "INSERT INTO role (title, salary, department_id) VALUES ('" + role + "', '" + salary + "', (select deptid from department where name = '"+ dept + "'))",
             function(err, res) {
             if (err) throw err;
             console.log("Role Successfully Added!")
             reroute();
         })
+    })
     })
 }
 
