@@ -8,26 +8,23 @@ const addFunctions = require("./Utils/addfuncs.js")
 var mysql = require("mysql");
 
 
-function initArt() {
-    figlet('Employee Tracking System', function(err, data) {
-         if (err) {
-             console.log('Something went wrong...');
-             console.dir(err);
-             return;
-         }
-         console.log(data)
-     });
- }
-initArt();
-
 connection.connect((err) => {
     if (err) throw err;
-    primaryPrompt();
+    initArt();
 })
 
-
- 
-
+function initArt() {
+    figlet('Employee Tracking System', function(err, data) {
+        if (err) {
+            console.log('Something went wrong...');
+            console.dir(err);
+            return;
+        }
+        console.log(data)
+        primaryPrompt();
+    });
+   
+}
 
 function primaryPrompt() {
     inquirer.prompt(prompts)

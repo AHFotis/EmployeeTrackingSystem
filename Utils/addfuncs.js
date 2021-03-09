@@ -193,7 +193,7 @@ function updateEmpRole () {
                 //saving the response to an array so first and last name can be split
                 let nameArray = response.employee.split(" ");
                 connection.query(
-                    "SELECT roleid, title FROM role",
+                    "SELECT role_id, title FROM role",
                     function(err, res) {
                       if (err) throw err;
                       console.table(res);
@@ -208,7 +208,6 @@ function updateEmpRole () {
                         var firstN = nameArray[0];
                         var lastN = nameArray[1];
                         var newRole = response.role;
-                       console.log(firstN, lastN, newRole)
                         
                         connection.query(
                             "UPDATE employee SET role_id = '" + newRole + "' WHERE first_name = '" + firstN + "' AND last_name = '" + lastN + "'",
@@ -254,6 +253,7 @@ function reroute() {
    
 }    
 module.exports = {
+
     addDept,
     addRole,
     addEmployee, 

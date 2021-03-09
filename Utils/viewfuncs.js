@@ -294,9 +294,6 @@ function reroute() {
    
 }    
 
-
-
-
 module.exports = {
     viewAll,
     viewDept,
