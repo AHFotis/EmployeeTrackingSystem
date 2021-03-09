@@ -3,6 +3,9 @@ var mysql = require("mysql");
 const inquirer = require("inquirer");
 const prompts = require("./prompts");
 
+let roleArray = [];
+let managerArray = [];
+
 function addDept () {
     inquirer.prompt([{
         type: 'input',
@@ -53,7 +56,7 @@ connection.query(
         var salary = response.salary;
         var dept = response.department.name;
         connection.query(
-            "INSERT INTO role (title, salary, department_id) VALUES ('" + role + "', '" + salary + "', (select deptid from department where name = '"+ dept + "'))",
+            "INSERT INTO roles (title, salary, department_id) VALUES ('" + role + "', '" + salary + "', (select deptid from department where name = '"+ dept + "'))",
             function(err, res) {
             if (err) throw err;
             console.log("Role Successfully Added!")
@@ -64,6 +67,14 @@ connection.query(
 }
 
 function addEmployee () {
+    connection.query(
+     "SELECT title FROM roles",
+    function (err, res) {
+  for (var i = 0; i < res.length; i++) {
+      roleArray.push(res[i].title)
+  }
+    console.log(roleArray)
+    if (err) throw err;
     inquirer.prompt([{
         type: 'input',
         name: 'first',
@@ -75,34 +86,62 @@ function addEmployee () {
         message: "Please type in the new employee's last name.",
     },
     {
-        type: 'input',
+        type: 'list',
         name: 'role',
-        message: "Please type in the new employee's role id.",
+        choices: roleArray,
+        message: "Please chose this employee's role.",
     },
-    {
-        type: 'input',
-        name: 'manager',
-        message: "Please type in the new employee's manager id.",
-    },
+    
 ]).then((response) => {
         var first = response.first;
         var last = response.last;
         var role = response.role;
-        var manager = response.manager;
+        // var manager = response.manager;
         // var dept = response.dept;
-        connection.query(
-            "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('" + first + "', '" + last + "', '" + role + "', '" + manager + "')",
+    connection.query(
+        //Save this to an array like above and it will work just fine.
+
+        "SELECT first_name, last_name FROM employee WHERE manager_id IS NULL",
+            // "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('" + first + "', '" + last + "', '" + role + "', '" + manager + "')",
             function(err, res) {
+                for (var i = 0; i < res.length; i++) {
+                    managerArray.push(res[i].first_name + " " + res[i].last_name)
+                }
+                console.log(managerArray)
             if (err) throw err;
-            console.log("Role Successfully Added!")
-            reroute();
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'manager',
+                    choices: managerArray,
+                    message: "Please chose this employee's role.",
+                },
+            ]).then((response) => {
+                let manager = response.manager.split(" ")
+                
+                connection.query(
+                    //NOT WORKING PLEASE LOOK AT THIS LATER
+                    "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('" + first + "', '" + last + "', (select roleid from roles where title = '" + role + "'), (select empid from employee where first_name = '" + manager[0] + "' and last_name = '" + manager[1] + "'))",
+                                function(err, res) {
+                                if (err) throw err;
+                                roleArray.empty()
+                                managerArray.empty()
+                                console.log(roleArray)
+                                console.log(managerArray)
+                                console.log("Role Successfully Added!")
+                                reroute();
+                            
+                            })
+            })
+           
         })
     })
+})
 }
 
 // function addEmployee () {
 //     connection.query(
-//         "SELECT title FROM role",
+//         "SELECT name FROM department",
 //         function (err, res) {
 //         if (err) throw err;
 //         inquirer.prompt([
@@ -193,7 +232,7 @@ function updateEmpRole () {
                 //saving the response to an array so first and last name can be split
                 let nameArray = response.employee.split(" ");
                 connection.query(
-                    "SELECT role_id, title FROM role",
+                    "SELECT roleid, title FROM roles",
                     function(err, res) {
                       if (err) throw err;
                       console.table(res);
