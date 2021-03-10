@@ -44,7 +44,15 @@ function viewManager () {
         })
 }
 
-
+function viewBudget () {
+    connection.query(
+        "SELECT name as DeptName, SUM(salary) as DeptBudget FROM roles INNER JOIN department ON roles.department_id = department.deptid GROUP BY name",
+        function(err, res) {
+          if (err) throw err;
+            console.table(res)
+            viewReroute();
+        })
+}
 
 function viewReroute() {
     inquirer.prompt(prompts)
@@ -57,6 +65,8 @@ function viewReroute() {
          viewRole();
      } else if (response.main == "View Employees by Manager") {
         viewManager();
+    }else if (response.main == "View Utilized Budget Per Department") {
+        viewBudget();
     }else if (response.main == "Add a Department") {
         addfuncs.addDept();
     } else if (response.main == "Add a Role") {
@@ -83,4 +93,5 @@ module.exports = {
     viewDept,
     viewRole,
     viewManager, 
+    viewBudget
 }

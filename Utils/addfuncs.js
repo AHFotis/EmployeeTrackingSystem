@@ -5,7 +5,7 @@ const prompts = require("./prompts");
 const viewfuncs = require("./viewfuncs")
 
 
-
+//Function to add a department to the database
 function addDept() {
     inquirer.prompt([{
         type: 'input',
@@ -23,6 +23,7 @@ function addDept() {
     })
 }
 
+//Function to add a role to the database
 function addRole() {
     connection.query(
         "SELECT name FROM department",
@@ -54,7 +55,8 @@ function addRole() {
             ]).then((response) => {
                 var role = response.role;
                 var salary = response.salary;
-                var dept = response.department.name;
+                var dept = response.department;
+                console.log(dept)
                 connection.query(
                     "INSERT INTO roles (title, salary, department_id) VALUES ('" + role + "', '" + salary + "', (select deptid from department where name = '" + dept + "'))",
                     function (err, res) {
@@ -66,6 +68,7 @@ function addRole() {
         })
 }
 
+//function to add an employee to the database
 function addEmployee() {
     let roleArray = [];
     let managerArray = [];
@@ -131,6 +134,7 @@ function addEmployee() {
         })
 }
 
+//function to update an employee's role
 function updateEmpRole() {
     let newRoleArray = [];
     connection.query(
@@ -188,6 +192,7 @@ function updateEmpRole() {
         })
 }
 
+//function to update an employee's manager
 function updateManager() {
     let updateManArray = [];
     connection.query(
@@ -245,7 +250,7 @@ function updateManager() {
         })
 }
 
-
+//function to go back to menu when task is completed.
 function addReroute() {
     inquirer.prompt(prompts)
         .then((response) => {
@@ -257,6 +262,8 @@ function addReroute() {
                 viewfuncs.viewRole();
             } else if (response.main == "View Employees by Manager") {
                 viewfuncs.viewManager();
+            }else if (response.main == "View Utilized Budget Per Department") {
+                viewfuncs.viewBudget();
             } else if (response.main == "Add a Department") {
                 addDept();
             } else if (response.main == "Add a Role") {

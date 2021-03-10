@@ -8,6 +8,7 @@ const prompt = [
           "View Employees by Department",
           "View Employees by Role",
           "View Employees by Manager",
+          "View Utilized Budget Per Department",
           "Add a Department",
           "Add a Role",
           "Add an Employee",

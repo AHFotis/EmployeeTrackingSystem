@@ -37,6 +37,8 @@ function primaryPrompt() {
             viewFunctions.viewRole();
          } else if (response.main == "View Employees by Manager") {
             viewFunctions.viewManager();
+        }else if (response.main == "View Utilized Budget Per Department") {
+            viewFunctions.viewBudget();
         }else if (response.main == "Add a Department") {
             addFunctions.addDept();
         } else if (response.main == "Add a Role") {
