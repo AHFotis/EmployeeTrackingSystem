@@ -16,7 +16,7 @@ function viewAll () {
 
 function viewDept () {
     connection.query(
-        "SELECT name, first_name, last_name, title FROM department LEFT JOIN roles ON department.deptid = roles.department_id LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY name",
+        "SELECT deptid, name, first_name, last_name, title, salary FROM department LEFT JOIN roles ON department.deptid = roles.department_id LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY name",
         function(err, res) {
           if (err) throw err;
             console.table(res)
@@ -26,7 +26,7 @@ function viewDept () {
 
 function viewRole () {
     connection.query(
-        "SELECT title, first_name, last_name FROM roles LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY title",
+        "SELECT title, first_name, last_name, salary, name FROM roles LEFT JOIN department ON roles.dept_id = department.deptid LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY title",
         function(err, res) {
           if (err) throw err;
             console.table(res)
@@ -65,6 +65,8 @@ function viewReroute() {
         addfuncs.addEmployee();
     }else if (response.main == "Update an Employee's Role") {
         addfuncs.updateEmpRole();
+    }else if (response.main == "Update an Employee's Manager") {
+        addfuncs.updateManager();
     }else if (response.main == "Exit application") {
         console.log("Now leaving employee database...")
         connection.end()

@@ -1,4 +1,4 @@
-const prompts = [
+const prompt = [
    {
         name: "main",
         type: "list",
@@ -12,10 +12,13 @@ const prompts = [
           "Add a Role",
           "Add an Employee",
           "Update an Employee's Role",
+          "Update an Employee's Manager",
           "Exit application"
         ]
   },
 ]
+
         
      
-module.exports = prompts
+module.exports = prompt
+  

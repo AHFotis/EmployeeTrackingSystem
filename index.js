@@ -45,6 +45,8 @@ function primaryPrompt() {
             addFunctions.addEmployee();
         }else if (response.main == "Update an Employee's Role") {
             addFunctions.updateEmpRole();
+        }else if (response.main == "Update an Employee's Manager") {
+            addFunctions.updateManager();
         }else if (response.main == "Exit application") {
             console.log("Now leaving employee database...")
             connection.end()
