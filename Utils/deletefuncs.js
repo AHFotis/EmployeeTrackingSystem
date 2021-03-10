@@ -38,6 +38,32 @@ function deleteDepartment () {
 }
 
 function deleteRole () {
+    let delRoleArray = [];
+    connection.query(
+        "SELECT title FROM roles",
+        function (err, res) {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                delRoleArray.push(res[i].title)
+            }
+            inquirer.prompt([
+            {
+                name: "role",
+                type: "list",
+                choices: delRoleArray,
+                message: "Please select the role you would like to delete."
+            }
+            ]).then((response) => {
+                var role = response.role
+                connection.query(
+                    "DELETE FROM roles WHERE title = '" + role + "'",
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log("Role Successfully Deleted!")
+                        deleteReroute();
+                    })
+            })
+        })
 
 }
 
@@ -68,15 +94,16 @@ function deleteReroute() {
         addfuncs.updateEmpRole();
     }else if (response.main == "Update an Employee's Manager") {
         addfuncs.updateManager();
+    }else if (response.main == "Delete Department") {
+        deleteDepartment();
     }else if (response.main == "Exit application") {
         console.log("Now leaving employee database...")
         connection.end()
-    } else {
-         console.log("not yet")
-     }
+    } 
     
 })
    
 }    module.exports = {
         deleteDepartment,
+        deleteRole
 }

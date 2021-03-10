@@ -15,6 +15,7 @@ const prompt = [
           "Update an Employee's Role",
           "Update an Employee's Manager",
           "Delete Department",
+          "Delete Role",
           "Exit application"
         ]
   },

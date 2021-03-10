@@ -3,6 +3,7 @@ var mysql = require("mysql");
 const inquirer = require("inquirer");
 const prompts = require("./prompt");
 const viewfuncs = require("./viewfuncs")
+const delfuncs = require("./deletefuncs")
 
 
 //Function to add a department to the database
@@ -273,7 +274,9 @@ function addReroute() {
                 updateEmpRole();
             } else if (response.main == "Update an Employee's Manager") {
                 updateManager();
-            } else if (response.main == "Exit application") {
+            } else if (response.main == "Delete Department") {
+                delfuncs.deleteDepartment();
+            }else if (response.main == "Exit application") {
                 console.log("Now leaving employee database...")
                 connection.end()
             }

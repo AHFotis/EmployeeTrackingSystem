@@ -52,6 +52,8 @@ function primaryPrompt() {
             addFunctions.updateManager();
         }else if (response.main == "Delete Department") {
             delFunctions.deleteDepartment();
+        }else if (response.main == "Delete Role") {
+            delFunctions.deleteRole();
         }else if (response.main == "Exit application") {
             console.log("Now leaving employee database...")
             connection.end()
