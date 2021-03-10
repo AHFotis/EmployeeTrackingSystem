@@ -8,7 +8,7 @@ const delfuncs = require("./deletefuncs")
 //function to view all employees
 function viewAll() {
     connection.query(
-        "SELECT empid, first_name, last_name, name, title, salary FROM employee LEFT JOIN roles ON roles.roleid = employee.role_id LEFT JOIN department ON department.deptid = roles.department_id",
+        "SELECT empid, first_name, last_name, name as department, title, salary FROM employee LEFT JOIN roles ON roles.roleid = employee.role_id LEFT JOIN department ON department.deptid = roles.department_id",
         function (err, res) {
             if (err) throw err;
             console.table(res)
@@ -19,7 +19,7 @@ function viewAll() {
 //function to view employees by department
 function viewDept() {
     connection.query(
-        "SELECT deptid, name, first_name, last_name, title, salary FROM department LEFT JOIN roles ON department.deptid = roles.department_id LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY name",
+        "SELECT deptid, name as department, first_name, last_name, title, salary FROM department LEFT JOIN roles ON department.deptid = roles.department_id LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY name",
         function (err, res) {
             if (err) throw err;
             console.table(res)
@@ -30,7 +30,7 @@ function viewDept() {
 //function to view employees by role
 function viewRole() {
     connection.query(
-        "SELECT title, first_name, last_name, salary, name FROM roles LEFT JOIN department ON roles.dept_id = department.deptid LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY title",
+        "SELECT title, first_name, last_name, salary, name as department FROM roles LEFT JOIN department ON roles.department_id = department.deptid LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY title",
         function (err, res) {
             if (err) throw err;
             console.table(res)
