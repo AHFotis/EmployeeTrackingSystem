@@ -1,7 +1,7 @@
 const connection = require("./connection")
 var mysql = require("mysql");
 const inquirer = require("inquirer");
-const prompts = require("./prompts");
+const prompts = require("./prompt");
 const addfuncs = require("./addfuncs")
 
 function viewAll () {

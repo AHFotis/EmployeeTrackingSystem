@@ -2,9 +2,10 @@ const connection = require("./Utils/connection");
 const cTable = require('console.table');
 var figlet = require('figlet');
 var inquirer = require('inquirer');
-const prompts = require("./Utils/prompts");
+const prompts = require("./Utils/prompt");
 const viewFunctions = require("./Utils/viewfuncs")
 const addFunctions = require("./Utils/addfuncs.js")
+const delFunctions = require("./Utils/deletefuncs")
 var mysql = require("mysql");
 
 
@@ -49,6 +50,8 @@ function primaryPrompt() {
             addFunctions.updateEmpRole();
         }else if (response.main == "Update an Employee's Manager") {
             addFunctions.updateManager();
+        }else if (response.main == "Delete Department") {
+            delFunctions.deleteDepartment();
         }else if (response.main == "Exit application") {
             console.log("Now leaving employee database...")
             connection.end()

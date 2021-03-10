@@ -1,7 +1,7 @@
 const connection = require("./connection")
 var mysql = require("mysql");
 const inquirer = require("inquirer");
-const prompts = require("./prompts");
+const prompts = require("./prompt");
 const viewfuncs = require("./viewfuncs")
 
 
@@ -56,7 +56,6 @@ function addRole() {
                 var role = response.role;
                 var salary = response.salary;
                 var dept = response.department;
-                console.log(dept)
                 connection.query(
                     "INSERT INTO roles (title, salary, department_id) VALUES ('" + role + "', '" + salary + "', (select deptid from department where name = '" + dept + "'))",
                     function (err, res) {
