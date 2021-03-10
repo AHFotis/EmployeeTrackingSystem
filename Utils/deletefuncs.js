@@ -68,6 +68,35 @@ function deleteRole () {
 }
 
 function deleteEmployee () {
+    connection.query(
+        "SELECT first_name, last_name FROM employee",
+        function (err, res) {
+            if (err) throw err;
+            inquirer.prompt([
+            {
+                name: "employee",
+                type: "list",
+                choices: function () {
+
+                    return res.map((employee) => ({
+                        name: employee.first_name + " " + employee.last_name
+
+                    }));
+
+                },
+                message: "Please select the employee you would like to delete."
+            }
+            ]).then((response) => {
+                let empArray = response.employee.split(" ");
+                connection.query(
+                    "DELETE FROM employee WHERE first_name = '" + empArray[0] + "' AND last_name = '" + empArray[1] + "'",
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log("Employee Successfully Deleted!")
+                        deleteReroute();
+                    })
+            })
+        })
 
 }
 
@@ -96,14 +125,21 @@ function deleteReroute() {
         addfuncs.updateManager();
     }else if (response.main == "Delete Department") {
         deleteDepartment();
+    }else if (response.main == "Delete Role") {
+        deleteRole();
+    }else if (response.main == "Delete Employee") {
+        deleteEmployee();
     }else if (response.main == "Exit application") {
         console.log("Now leaving employee database...")
         connection.end()
-    } 
+    } else {
+        console.log("Invalid Option")
+    }
     
 })
    
 }    module.exports = {
         deleteDepartment,
-        deleteRole
+        deleteRole,
+        deleteEmployee
 }

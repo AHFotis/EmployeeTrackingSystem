@@ -54,6 +54,8 @@ function primaryPrompt() {
             delFunctions.deleteDepartment();
         }else if (response.main == "Delete Role") {
             delFunctions.deleteRole();
+        }else if (response.main == "Delete Employee") {
+            delFunctions.deleteEmployee();
         }else if (response.main == "Exit application") {
             console.log("Now leaving employee database...")
             connection.end()

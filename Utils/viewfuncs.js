@@ -86,9 +86,15 @@ function viewReroute() {
                 addfuncs.updateManager();
             } else if (response.main == "Delete Department") {
                 delfuncs.deleteDepartment();
-            } else if (response.main == "Exit application") {
+            } else if (response.main == "Delete Role") {
+                delfuncs.deleteRole();
+            }else if (response.main == "Delete Employee") {
+                delfuncs.deleteEmployee();
+            }else if (response.main == "Exit application") {
                 console.log("Now leaving employee database...")
                 connection.end()
+            }else {
+                console.log("Invalid Option")
             }
 
         })
