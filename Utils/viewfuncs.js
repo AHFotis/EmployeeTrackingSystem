@@ -2,6 +2,7 @@ const connection = require("./connection")
 var mysql = require("mysql");
 const inquirer = require("inquirer");
 const prompts = require("./prompts");
+const addfuncs = require("./addfuncs")
 
 function viewAll () {
     connection.query(
@@ -9,7 +10,7 @@ function viewAll () {
         function(err, res) {
           if (err) throw err;
             console.table(res)
-            reroute();
+            viewReroute() ;
         })
     }
 
@@ -19,7 +20,7 @@ function viewDept () {
         function(err, res) {
           if (err) throw err;
             console.table(res)
-            reroute();
+            viewReroute();
         })
 }
 
@@ -29,7 +30,7 @@ function viewRole () {
         function(err, res) {
           if (err) throw err;
             console.table(res)
-            reroute();
+            viewReroute();
         })
 }
 
@@ -39,13 +40,13 @@ function viewManager () {
         function(err, res) {
           if (err) throw err;
             console.table(res)
-            reroute();
+            viewReroute();
         })
 }
 
 
 
-function reroute() {
+function viewReroute() {
     inquirer.prompt(prompts)
 .then((response) => {
      if (response.main == 'View All Employees') {
@@ -57,13 +58,13 @@ function reroute() {
      } else if (response.main == "View Employees by Manager") {
         viewManager();
     }else if (response.main == "Add a Department") {
-        addDept();
+        addfuncs.addDept();
     } else if (response.main == "Add a Role") {
-        addRole();
+        addfuncs.addRole();
     }else if (response.main == "Add an Employee") {
-        addEmployee();
+        addfuncs.addEmployee();
     }else if (response.main == "Update an Employee's Role") {
-        updateEmpRole();
+        addfuncs.updateEmpRole();
     }else if (response.main == "Exit application") {
         console.log("Now leaving employee database...")
         connection.end()
