@@ -72,7 +72,7 @@ function addRole() {
 //function to add an employee to the database
 function addEmployee() {
     let roleArray = [];
-    let managerArray = [];
+    let managerArray = ["None"];
     connection.query(
         "SELECT title FROM roles",
         function (err, res) {
@@ -117,17 +117,29 @@ function addEmployee() {
                             },
                         ]).then((response) => {
                             let manager = response.manager
+                            if (manager == "None") {
+                                connection.query(
+                                "INSERT INTO employee (first_name, last_name, role_id) VALUES ('" + first + "', '" + last + "', (select roleid from roles where title = '" + role + "'))",
+                                function (err, res) {
+                                    if (err) throw err;
+                                    roleArray = [];
+                                    managerArray = ["None"];
+                                    console.log(chalk.green("Role Successfully Added!"))
+                                    addReroute()
 
+                                })
+                            }else {
                             connection.query(
                                 "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('" + first + "', '" + last + "', (select roleid from roles where title = '" + role + "'), (select roleid from roles where title = '" + manager + "'))",
                                 function (err, res) {
                                     if (err) throw err;
                                     roleArray = [];
-                                    managerArray = [];
+                                    managerArray = ["None"];
                                     console.log(chalk.green("Role Successfully Added!"))
                                     addReroute()
 
                                 })
+                            }
                         })
 
                     })
