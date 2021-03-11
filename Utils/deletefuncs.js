@@ -1,9 +1,10 @@
-const connection = require("./connection")
+const connection = require("./connection");
 var mysql = require("mysql");
 const inquirer = require("inquirer");
 const prompts = require("./prompt");
-const addfuncs = require("./addfuncs")
-const viewfuncs = require("./viewfuncs")
+const addfuncs = require("./addfuncs");
+const viewfuncs = require("./viewfuncs");
+const chalk = require('chalk');
 
 //function to delete a department
 function deleteDepartment() {
@@ -31,7 +32,7 @@ function deleteDepartment() {
                     "DELETE FROM department WHERE name = '" + dept + "'",
                     function (err, res) {
                         if (err) throw err;
-                        console.log("Department Successfully Deleted!")
+                        console.log(chalk.green("Department Successfully Deleted!"))
                         deleteReroute();
                     })
             })
@@ -61,7 +62,7 @@ function deleteRole() {
                     "DELETE FROM roles WHERE title = '" + role + "'",
                     function (err, res) {
                         if (err) throw err;
-                        console.log("Role Successfully Deleted!")
+                        console.log(chalk.green("Role Successfully Deleted!"))
                         deleteReroute();
                     })
             })
@@ -95,7 +96,7 @@ function deleteEmployee() {
                     "DELETE FROM employee WHERE first_name = '" + empArray[0] + "' AND last_name = '" + empArray[1] + "'",
                     function (err, res) {
                         if (err) throw err;
-                        console.log("Employee Successfully Deleted!")
+                        console.log(chalk.green("Employee Successfully Deleted!"))
                         deleteReroute();
                     })
             })
@@ -134,10 +135,10 @@ function deleteReroute() {
             } else if (response.main == "Delete Employee") {
                 deleteEmployee();
             } else if (response.main == "Exit application") {
-                console.log("Now leaving employee database...")
+                console.log(chalk.yellow("Now leaving employee database..."))
                 connection.end()
             } else {
-                console.log("Invalid Option")
+                console.log(chalk.red("Invalid Option"))
             }
 
         })

@@ -7,6 +7,7 @@ const viewFunctions = require("./Utils/viewfuncs")
 const addFunctions = require("./Utils/addfuncs.js")
 const delFunctions = require("./Utils/deletefuncs")
 var mysql = require("mysql");
+const chalk = require('chalk');
 
 
 connection.connect((err) => {
@@ -17,11 +18,11 @@ connection.connect((err) => {
 function initArt() {
     figlet('Employee Tracking System', function(err, data) {
         if (err) {
-            console.log('Something went wrong...');
+            console.log(chalk.red('Something went wrong...'));
             console.dir(err);
             return;
         }
-        console.log(data)
+        console.log(chalk.green(data))
         primaryPrompt();
     });
    
@@ -57,10 +58,10 @@ function primaryPrompt() {
         }else if (response.main == "Delete Employee") {
             delFunctions.deleteEmployee();
         }else if (response.main == "Exit application") {
-            console.log("Now leaving employee database...")
+            console.log(chalk.yellow("Now leaving employee database..."))
             connection.end()
         } else {
-             console.log("Invalid Option")
+             console.log(chalk.red("Invalid Option"))
          }
         
     })

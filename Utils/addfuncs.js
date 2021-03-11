@@ -1,9 +1,10 @@
-const connection = require("./connection")
+const connection = require("./connection");
 var mysql = require("mysql");
 const inquirer = require("inquirer");
 const prompts = require("./prompt");
-const viewfuncs = require("./viewfuncs")
-const delfuncs = require("./deletefuncs")
+const viewfuncs = require("./viewfuncs");
+const delfuncs = require("./deletefuncs");
+const chalk = require('chalk');
 
 
 //Function to add a department to the database
@@ -18,7 +19,7 @@ function addDept() {
             "INSERT INTO department (name) VALUES ('" + dept + "')",
             function (err, res) {
                 if (err) throw err;
-                console.log("Department Successfully Added!")
+                console.log(chalk.green("Department Successfully Added!"))
                 addReroute();
             })
     })
@@ -61,7 +62,7 @@ function addRole() {
                     "INSERT INTO roles (title, salary, department_id) VALUES ('" + role + "', '" + salary + "', (select deptid from department where name = '" + dept + "'))",
                     function (err, res) {
                         if (err) throw err;
-                        console.log("Role Successfully Added!")
+                        console.log(chalk.green("Role Successfully Added!"))
                         addReroute();
                     })
             })
@@ -123,7 +124,7 @@ function addEmployee() {
                                     if (err) throw err;
                                     roleArray = [];
                                     managerArray = [];
-                                    console.log("Role Successfully Added!")
+                                    console.log(chalk.green("Role Successfully Added!"))
                                     addReroute()
 
                                 })
@@ -183,7 +184,7 @@ function updateEmpRole() {
                                 function (err, res) {
                                     if (err) throw err;
                                     newRoleArray = [];
-                                    console.log("Employee Successfully Updated!")
+                                    console.log(chalk.green("Employee Successfully Updated!"))
                                     addReroute();
                                 })
                         })
@@ -241,7 +242,7 @@ function updateManager() {
                                 function (err, res) {
                                     if (err) throw err;
                                     updateManArray = [];
-                                    console.log("Manager Successfully Updated!")
+                                    console.log(chalk.green("Manager Successfully Updated!"))
                                     addReroute();
                                 })
                         })
@@ -281,10 +282,10 @@ function addReroute() {
             }else if (response.main == "Delete Employee") {
                 delfuncs.deleteEmployee();
             }else if (response.main == "Exit application") {
-                console.log("Now leaving employee database...")
+                console.log(chalk.yellow("Now leaving employee database..."))
                 connection.end()
             }else {
-                console.log("Invalid Option")
+                console.log(chalk.red("Invalid Option"))
             }
 
 

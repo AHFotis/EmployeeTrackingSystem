@@ -1,9 +1,10 @@
-const connection = require("./connection")
+const connection = require("./connection");
 var mysql = require("mysql");
 const inquirer = require("inquirer");
 const prompts = require("./prompt");
-const addfuncs = require("./addfuncs")
-const delfuncs = require("./deletefuncs")
+const addfuncs = require("./addfuncs");
+const delfuncs = require("./deletefuncs");
+const chalk = require('chalk');
 
 //function to view all employees
 function viewAll() {
@@ -91,10 +92,10 @@ function viewReroute() {
             }else if (response.main == "Delete Employee") {
                 delfuncs.deleteEmployee();
             }else if (response.main == "Exit application") {
-                console.log("Now leaving employee database...")
+                console.log(chalk.yellow("Now leaving employee database..."))
                 connection.end()
             }else {
-                console.log("Invalid Option")
+                console.log(chalk.red("Invalid Option"))
             }
 
         })
