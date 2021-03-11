@@ -465,5 +465,6 @@ module.exports = {
     updateManager,
     deleteDepartment,
     deleteRole,
-    deleteEmployee
+    deleteEmployee,
+    reroute
 }
