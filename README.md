@@ -20,7 +20,7 @@ A command line application that allows the user interact with a Content Mangaeme
   
 ## Reference
 
-  Click [here](https://drive.google.com/file/d/1t6FIN147BdtLywwt2bMgGLkMjmL9keft/view) to view a walkthrough of the application.
+  Click [here](https://drive.google.com/file/d/1SLzl434iHzIpIeowXpfI_X8LOkMRYnQ3/view) to view a walkthrough of the application.
 
   Sample of note screen.
   ![Terminal Shot](Reference/Assets/terminal.png)
