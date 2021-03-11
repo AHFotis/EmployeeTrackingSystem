@@ -3,9 +3,7 @@ const cTable = require('console.table');
 var figlet = require('figlet');
 var inquirer = require('inquirer');
 const prompts = require("./Utils/prompt");
-const viewFunctions = require("./Utils/viewfuncs")
-const addFunctions = require("./Utils/addfuncs.js")
-const delFunctions = require("./Utils/deletefuncs")
+const functions = require("./Utils/functions")
 var mysql = require("mysql");
 const chalk = require('chalk');
 
@@ -32,31 +30,31 @@ function primaryPrompt() {
     inquirer.prompt(prompts)
     .then((response) => {
          if (response.main == 'View All Employees') {
-            viewFunctions.viewAll();
+            functions.viewAll();
          }else if (response.main == 'View Employees by Department') {
-            viewFunctions.viewDept();
+            functions.viewDept();
          } else if (response.main == "View Employees by Role") {
-            viewFunctions.viewRole();
+            functions.viewRole();
          } else if (response.main == "View Employees by Manager") {
-            viewFunctions.viewManager();
+            functions.viewManager();
         }else if (response.main == "View Utilized Budget Per Department") {
-            viewFunctions.viewBudget();
+            functions.viewBudget();
         }else if (response.main == "Add a Department") {
-            addFunctions.addDept();
+            functions.addDept();
         } else if (response.main == "Add a Role") {
-            addFunctions.addRole();
+            functions.addRole();
         }else if (response.main == "Add an Employee") {
-            addFunctions.addEmployee();
+            functions.addEmployee();
         }else if (response.main == "Update an Employee's Role") {
-            addFunctions.updateEmpRole();
+            functions.updateEmpRole();
         }else if (response.main == "Update an Employee's Manager") {
-            addFunctions.updateManager();
+            functions.updateManager();
         }else if (response.main == "Delete Department") {
-            delFunctions.deleteDepartment();
+            functions.deleteDepartment();
         }else if (response.main == "Delete Role") {
-            delFunctions.deleteRole();
+            functions.deleteRole();
         }else if (response.main == "Delete Employee") {
-            delFunctions.deleteEmployee();
+            functions.deleteEmployee();
         }else if (response.main == "Exit application") {
             console.log(chalk.yellow("Now leaving employee database..."))
             connection.end()
@@ -66,7 +64,6 @@ function primaryPrompt() {
         
     })
 }
-
 
 
 

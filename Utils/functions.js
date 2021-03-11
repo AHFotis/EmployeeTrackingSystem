@@ -2,12 +2,64 @@ const connection = require("./connection");
 var mysql = require("mysql");
 const inquirer = require("inquirer");
 const prompts = require("./prompt");
-const viewfuncs = require("./viewfuncs");
-const delfuncs = require("./deletefuncs");
 const chalk = require('chalk');
 
+//function to view all employees
+function viewAll() {
+    connection.query(
+        "SELECT e.empid as ID, CONCAT(e.first_name, ' ', e.last_name) as Employee, name as Department, title as Title, salary as Salary,  CONCAT(m.first_name, ' ', m.last_name) as Manager FROM employee e LEFT JOIN roles ON roles.roleid = e.role_id LEFT JOIN department ON department.deptid = roles.department_id LEFT JOIN employee m ON m.empid = e.manager_id ORDER BY e.empid",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res)
+            reroute();
+        })
+}
 
-//Function to add a department to the database
+//function to view employees by department
+function viewDept() {
+    connection.query(
+        "SELECT deptid as DeptId, name as Department, CONCAT(e.first_name, ' ', e.last_name) as Employee, title as Title, salary as Salary, CONCAT(m.first_name, ' ', m.last_name) as Manager FROM department LEFT JOIN roles ON department.deptid = roles.department_id LEFT JOIN employee e ON roles.roleid = e.role_id LEFT JOIN employee m ON m.empid = e.manager_id ORDER BY deptid",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res)
+            reroute();
+        })
+}
+
+//function to view employees by role
+function viewRole() {
+    connection.query(
+        "SELECT title as Title, CONCAT(e.first_name, ' ', e.last_name) as Employee, salary as Salary, name as Department, CONCAT(m.first_name, ' ', m.last_name) as Manager FROM roles LEFT JOIN department ON roles.department_id = department.deptid LEFT JOIN employee e ON roles.roleid = e.role_id LEFT JOIN employee m ON m.empid = e.manager_id ORDER BY title",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res)
+            reroute();
+        })
+}
+
+//function to view employees by manager
+function viewManager() {
+    connection.query(
+        "SELECT CONCAT(m.first_name, ' ', m.last_name) AS 'Manager',CONCAT(e.first_name, ' ', e.last_name) AS 'Employee', title as EmployeeTitle, salary as Salary, name as Department FROM employee e LEFT JOIN roles ON roles.roleid = e.role_id LEFT JOIN department ON department.deptid = roles.department_id INNER JOIN employee m ON m.empid = e.manager_id ORDER BY manager",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res)
+            reroute();
+        })
+}
+
+//function to view utilized budgets
+function viewBudget() {
+    connection.query(
+        "SELECT name as DeptName, SUM(salary) as DeptBudget FROM roles INNER JOIN department ON roles.department_id = department.deptid GROUP BY name",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res)
+            reroute();
+        })
+}
+
+//Function to add a department to database
 function addDept() {
     inquirer.prompt([{
         type: 'input',
@@ -20,7 +72,7 @@ function addDept() {
             function (err, res) {
                 if (err) throw err;
                 console.log(chalk.green("Department Successfully Added!"))
-                addReroute();
+                reroute();
             })
     })
 }
@@ -63,7 +115,7 @@ function addRole() {
                     function (err, res) {
                         if (err) throw err;
                         console.log(chalk.green("Role Successfully Added!"))
-                        addReroute();
+                        reroute();
                     })
             })
         })
@@ -124,8 +176,8 @@ function addEmployee() {
                                     if (err) throw err;
                                     roleArray = [];
                                     managerArray = ["None"];
-                                    console.log(chalk.green("Role Successfully Added!"))
-                                    addReroute()
+                                    console.log(chalk.green("Employee Successfully Added!"))
+                                    reroute()
 
                                 })
                             }else {
@@ -135,8 +187,8 @@ function addEmployee() {
                                     if (err) throw err;
                                     roleArray = [];
                                     managerArray = ["None"];
-                                    console.log(chalk.green("Role Successfully Added!"))
-                                    addReroute()
+                                    console.log(chalk.green("Employee Successfully Added!"))
+                                    reroute()
 
                                 })
                             }
@@ -197,7 +249,7 @@ function updateEmpRole() {
                                     if (err) throw err;
                                     newRoleArray = [];
                                     console.log(chalk.green("Employee Successfully Updated!"))
-                                    addReroute();
+                                    reroute();
                                 })
                         })
                     })
@@ -255,7 +307,7 @@ function updateManager() {
                                     if (err) throw err;
                                     updateManArray = [];
                                     console.log(chalk.green("Manager Successfully Updated!"))
-                                    addReroute();
+                                    reroute();
                                 })
                         })
                     })
@@ -263,20 +315,117 @@ function updateManager() {
         })
 }
 
-//function to go back to menu when task is completed.
-function addReroute() {
+function deleteDepartment() {
+    connection.query(
+        "SELECT name FROM department",
+        function (err, res) {
+            if (err) throw err;
+            inquirer.prompt([
+                {
+                    name: "department",
+                    type: "list",
+                    choices: function () {
+
+                        return res.map((department) => ({
+                            name: department.name
+
+                        }));
+
+                    },
+                    message: "Please select the department you would like to delete."
+                }
+            ]).then((response) => {
+                dept = response.department
+                connection.query(
+                    "DELETE FROM department WHERE name = '" + dept + "'",
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log(chalk.green("Department Successfully Deleted!"))
+                        reroute();
+                    })
+            })
+        })
+}
+
+//function to delete a role
+function deleteRole() {
+    let delRoleArray = [];
+    connection.query(
+        "SELECT title FROM roles",
+        function (err, res) {
+            if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                delRoleArray.push(res[i].title)
+            }
+            inquirer.prompt([
+                {
+                    name: "role",
+                    type: "list",
+                    choices: delRoleArray,
+                    message: "Please select the role you would like to delete."
+                }
+            ]).then((response) => {
+                var role = response.role
+                connection.query(
+                    "DELETE FROM roles WHERE title = '" + role + "'",
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log(chalk.green("Role Successfully Deleted!"))
+                        reroute();
+                    })
+            })
+        })
+
+}
+
+//function to delete and employee
+function deleteEmployee() {
+    connection.query(
+        "SELECT first_name, last_name FROM employee",
+        function (err, res) {
+            if (err) throw err;
+            inquirer.prompt([
+                {
+                    name: "employee",
+                    type: "list",
+                    choices: function () {
+
+                        return res.map((employee) => ({
+                            name: employee.first_name + " " + employee.last_name
+
+                        }));
+
+                    },
+                    message: "Please select the employee you would like to delete."
+                }
+            ]).then((response) => {
+                let empArray = response.employee.split(" ");
+                connection.query(
+                    "DELETE FROM employee WHERE first_name = '" + empArray[0] + "' AND last_name = '" + empArray[1] + "'",
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log(chalk.green("Employee Successfully Deleted!"))
+                        reroute();
+                    })
+            })
+        })
+
+}
+
+//reroute function
+function reroute() {
     inquirer.prompt(prompts)
         .then((response) => {
             if (response.main == 'View All Employees') {
-                viewfuncs.viewAll();
+                viewAll();
             } else if (response.main == 'View Employees by Department') {
-                viewfuncs.viewDept();
+                viewDept();
             } else if (response.main == "View Employees by Role") {
-                viewfuncs.viewRole();
+                viewRole();
             } else if (response.main == "View Employees by Manager") {
-                viewfuncs.viewManager();
-            }else if (response.main == "View Utilized Budget Per Department") {
-                viewfuncs.viewBudget();
+                viewManager();
+            } else if (response.main == "View Utilized Budget Per Department") {
+                viewBudget();
             } else if (response.main == "Add a Department") {
                 addDept();
             } else if (response.main == "Add a Role") {
@@ -288,11 +437,11 @@ function addReroute() {
             } else if (response.main == "Update an Employee's Manager") {
                 updateManager();
             } else if (response.main == "Delete Department") {
-                delfuncs.deleteDepartment();
-            }else if (response.main == "Delete Role") {
-                delfuncs.deleteRole();
+                deleteDepartment();
+            } else if (response.main == "Delete Role") {
+                deleteRole();
             }else if (response.main == "Delete Employee") {
-                delfuncs.deleteEmployee();
+                deleteEmployee();
             }else if (response.main == "Exit application") {
                 console.log(chalk.yellow("Now leaving employee database..."))
                 connection.end()
@@ -300,16 +449,21 @@ function addReroute() {
                 console.log(chalk.red("Invalid Option"))
             }
 
-
         })
 
 }
 module.exports = {
-
+    viewAll,
+    viewDept,
+    viewRole,
+    viewManager,
+    viewBudget,
     addDept,
     addRole,
     addEmployee,
     updateEmpRole,
-    updateManager
-
+    updateManager,
+    deleteDepartment,
+    deleteRole,
+    deleteEmployee
 }
