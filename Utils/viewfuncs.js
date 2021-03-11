@@ -9,7 +9,7 @@ const chalk = require('chalk');
 //function to view all employees
 function viewAll() {
     connection.query(
-        "SELECT empid, first_name, last_name, name as department, title, salary FROM employee LEFT JOIN roles ON roles.roleid = employee.role_id LEFT JOIN department ON department.deptid = roles.department_id",
+        "SELECT e.empid as ID, CONCAT(e.first_name, ' ', e.last_name) as Employee, name as Department, title as Title, salary as Salary,  CONCAT(m.first_name, ' ', m.last_name) as Manager FROM employee e LEFT JOIN roles ON roles.roleid = e.role_id LEFT JOIN department ON department.deptid = roles.department_id LEFT JOIN employee m ON m.empid = e.manager_id ORDER BY e.empid",
         function (err, res) {
             if (err) throw err;
             console.table(res)
@@ -20,7 +20,7 @@ function viewAll() {
 //function to view employees by department
 function viewDept() {
     connection.query(
-        "SELECT deptid, name as department, first_name, last_name, title, salary FROM department LEFT JOIN roles ON department.deptid = roles.department_id LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY name",
+        "SELECT deptid as DeptId, name as Department, CONCAT(e.first_name, ' ', e.last_name) as Employee, title as Title, salary as Salary, CONCAT(m.first_name, ' ', m.last_name) as Manager FROM department LEFT JOIN roles ON department.deptid = roles.department_id LEFT JOIN employee e ON roles.roleid = e.role_id LEFT JOIN employee m ON m.empid = e.manager_id ORDER BY deptid",
         function (err, res) {
             if (err) throw err;
             console.table(res)
@@ -31,7 +31,7 @@ function viewDept() {
 //function to view employees by role
 function viewRole() {
     connection.query(
-        "SELECT title, first_name, last_name, salary, name as department FROM roles LEFT JOIN department ON roles.department_id = department.deptid LEFT JOIN employee ON roles.roleid = employee.role_id ORDER BY title",
+        "SELECT title as Title, CONCAT(e.first_name, ' ', e.last_name) as Employee, salary as Salary, name as Department, CONCAT(m.first_name, ' ', m.last_name) as Manager FROM roles LEFT JOIN department ON roles.department_id = department.deptid LEFT JOIN employee e ON roles.roleid = e.role_id LEFT JOIN employee m ON m.empid = e.manager_id ORDER BY title",
         function (err, res) {
             if (err) throw err;
             console.table(res)
@@ -42,7 +42,7 @@ function viewRole() {
 //function to view employees by manager
 function viewManager() {
     connection.query(
-        "SELECT e.first_name employee_first, e.last_name  employee_last, m.first_name manager_first, m.last_name manager_last FROM employee e INNER JOIN employee m ON m.empid = e.manager_id",
+        "SELECT CONCAT(m.first_name, ' ', m.last_name) AS 'Manager',CONCAT(e.first_name, ' ', e.last_name) AS 'Employee', title as EmployeeTitle, salary as Salary, name as Department FROM employee e LEFT JOIN roles ON roles.roleid = e.role_id LEFT JOIN department ON department.deptid = roles.department_id INNER JOIN employee m ON m.empid = e.manager_id ORDER BY manager",
         function (err, res) {
             if (err) throw err;
             console.table(res)

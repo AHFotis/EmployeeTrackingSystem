@@ -30,6 +30,7 @@ A command line application that allows the user interact with a Content Mangaeme
 ## Details
   * Open your command line in the Employee Tracking System Folder.
   * Run npm install to install all necessary packages and modules.
+  * Run the schema.sql and seed.sql in your workbench to access the database.
   * Run npm start to begin the application.
   * The command line will offer a series of prompts to guide you through the database. You can: 
         * View All Employees
