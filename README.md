@@ -32,20 +32,20 @@ A command line application that allows the user interact with a Content Mangaeme
   * Run the schema.sql and seed.sql in your workbench to access the database.
   * Run npm start to begin the application.
   * The command line will offer a series of prompts to guide you through the database. You can: 
-        * View All Employees
-        * View Employees by Department
-        * View Employees by Role
-        * View Employees by Manager
-        * View Utilized Budget Per Department
-        * Add a Department
-        * Add a Role
-        * Add an Employee
-        * Update an Employee's Role
-        * Update an Employee's Manager
-        * Delete Department
-        * Delete Role
-        * Delete Employee
-        * Exit application
+    * View All Employees
+    * View Employees by Department
+    * View Employees by Role
+    * View Employees by Manager
+    * View Utilized Budget Per Department
+    * Add a Department
+    * Add a Role
+    * Add an Employee
+    * Update an Employee's Role
+    * Update an Employee's Manager
+    * Delete Department
+    * Delete Role
+    * Delete Employee
+    * Exit application
 
 ## Technologies
 Technologies used: JavaScript, MySQL, console.table, Figlet, Inquierer, Chalk
